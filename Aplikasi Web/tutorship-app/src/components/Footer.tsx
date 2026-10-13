@@ -27,7 +27,7 @@ export default function Footer() {
         </div>
         <div>
           <h5 className="text-white font-bold mb-4">Kontak</h5>
-          <p className="text-sm mb-2">📞 0800-123-4567</p>
+          <p className="text-sm mb-2">📞 0812-1008-451</p>
           <p className="text-sm">support@tutorcare.id</p>
         </div>
       </div>
