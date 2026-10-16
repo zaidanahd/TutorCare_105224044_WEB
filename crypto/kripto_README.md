@@ -14,66 +14,67 @@ Sesuai ketentuan minimum, berikut adalah analisis kebutuhan kriptografi untuk mi
 
 | No | Target Data / Aset | Tujuan Keamanan (Security Goal) | Algoritma / Mekanisme | Prioritas |
 |:--:|:---|:---|:---|:--:|
-| 1 | **Password Pengguna** | Melindungi kredensial autentikasi dari serangan *dictionary*, *brute-force*, dan *rainbow table* saat disimpan di database. | PBKDF2 (`sha512`, 10.000 iterasi, 64-byte key) dengan *unique salt* | **Tinggi** |
-| 2 | **Data Transien / Sesi Booking** | Menjaga kerahasiaan (*confidentiality*) dan keutuhan catatan sesi bimbingan siswa selama proses transien. | AES-256-CBC dengan *randomized Initialization Vector* (IV) | **Tinggi** |
+| 1 | **Password Pengguna** | Melindungi kredensial autentikasi dari serangan *dictionary*, *brute-force*, dan *rainbow table* saat disimpan di database. | Node.js `crypto.scryptSync` dengan *unique salt* (16-byte) dan parameter keamanan tinggi | **Tinggi** |
+| 2 | **Data Transien / Sesi Booking** | Menjaga kerahasiaan (*confidentiality*) dan keutuhan catatan sesi bimbingan siswa selama proses transien. | Enkripsi simetris berbasis modul `crypto` dengan *randomized Initialization Vector* (IV) | **Tinggi** |
 | 3 | **Token Akses & Sesi** | Memastikan keaslian token otorisasi serta mencegah manipulasi atau pemalsuan oleh pihak tak berwenang. | HMAC-SHA256 Signatures | **Sedang** |
 
 ---
 
-##  3. Rancangan Komponen Kriptografi
+## 3. Rancangan Komponen Kriptografi
 
 ### **A. Alur Masukan $\rightarrow$ Proses $\rightarrow$ Keluaran**
-* **Hashing Password (PBKDF2):**
-  * *Masukan:* `Password Teks Biasa` + `Unique Salt`
-  * *Proses:* Penurunan kunci berbasis fungsi pseudorandom menggunakan iterasi tinggi (`10000` siklus HMAC-SHA512).
-  * *Keluaran:* Hash string heksadesimal 128 karakter yang aman untuk disimpan.
-* **Enkripsi/Dekripsi Data Booking (AES-256-CBC):**
-  * *Masukan:* `Catatan Sesi Teks Biasa` + `Kunci Simetris 256-bit` + `IV 128-bit`
-  * *Proses:* Enkripsi blok menggunakan mode *Cipher Block Chaining* (CBC).
-  * *Keluaran:* Gabungan string format `iv:ciphertext` berformat heksadesimal.
+- **Hashing Password (Scrypt & Salt):**
+  * *Masukan:* `Password Teks Biasa` + `Unique Salt` (16 bytes)
+  * *Proses:* Penurunan kunci berbasis fungsi *key derivation function* (scrypt) menggunakan modul keamanan standar Node.js.
+  * *Keluaran:* Format string gabungan `salt:hash` heksadesimal yang aman untuk disimpan.
+- **Verifikasi Kredensial:**
+  * *Masukan:* `Password Input` + `Stored Salt:Hash`
+  * *Proses:* Komparasi aman menggunakan `crypto.timingSafeEqual` untuk mencegah serangan *timing attack*.
+  * *Keluaran:* Nilai boolean (`true` / `false`).
 
 ### **B. Representasi Data**
-* Seluruh data yang dienkripsi dan di-hash direpresentasikan dalam format **Hexadecimal String** (`Buffer.toString('hex')`) agar aman ditransmisikan dan disimpan ke dalam media penyimpanan berbasis teks.
+- Seluruh data hasil enkripsi dan *hash* direpresentasikan dalam format **Hexadecimal String** (`Buffer.toString('hex')`) agar aman ditransmisikan dan disimpan ke dalam media penyimpanan berbasis teks.
 
 ### **C. Sumber Keacakan (Source of Randomness)**
-* Pembangunan *Initialization Vector* (IV) pada enkripsi AES dan pembuatan *Salt* pada PBKDF2 menggunakan generator bilangan acak kriptografi aman bawaan Node.js, yaitu **`crypto.randomBytes()`**, untuk memastikan nilai keacakan tidak dapat ditebak (*unpredictable*).
+- Pembuatan *Salt* dan komponen acak pengaman menggunakan generator bilangan acak kriptografi aman bawaan Node.js, yaitu **`crypto.randomBytes()`**, untuk memastikan nilai keacakan tidak dapat ditebak (*unpredictable*).
 
 ---
 
-##  4. Skenario Uji Otomatis & Hasil
-Modul ini dilengkapi dengan skenario pengujian otomatis yang mencakup pengujian positif, batas, dan negatif (manipulasi/data rusak).
+## 4. Skenario Uji Otomatis & Hasil
+Modul ini dilengkapi dengan skenario pengujian otomatis menggunakan framework Jest yang mencakup pengujian positif, batas, dan negatif.
 
-* **Jumlah Skenario Uji:** 4 skenario
-* **Status Minimal Berhasil:** 4/4 Berhasil
+- **Jumlah Skenario Uji:** 4 skenario
+- **Status Minimal Berhasil:** 4/4 Berhasil
 
 ### **Cara Menjalankan Pengujian Kriptografi:**
-Pastikan Anda berada di direktori root repositori (`tutorship-app`), lalu jalankan perintah berikut di terminal:
+Pastikan Anda berada di direktori root repositori, lalu jalankan perintah berikut di terminal:
 
 ```bash
-node run-crypto.cjs
-```
+npm test
 
 ### **Output Hasil Pengujian di Terminal:**
 ```text
-=== MENJALANKAN SKENARIO UJI KRIPTOGRAFI TUTORCARE ===
-Skenario 1 (Hash Konsisten): BERHASIL [✔]
-Skenario 2 (Enkripsi & Dekripsi Data): BERHASIL [✔]
-Skenario 3 (Uji Batas Password Berbeda): BERHASIL [✔]
-Skenario 4 (Uji Negatif Data Rusak/Manipulasi): BERHASIL [✔]
-```
+PASS  crypto/tutorCrypto.test.js
+  Pengujian Skenario Kriptografi TutorCare
+    ✓ Skenario 1: Hashing password menghasilkan format string yang valid (115 ms)
+    ✓ Skenario 2: Verifikasi sukses saat password benar (58 ms)
+    ✓ Skenario 3 (Negatif): Verifikasi gagal jika password salah (55 ms)
+    ✓ Skenario 4 (Uji Batas): Menangani input string kosong tanpa error fatal (12 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       4 passed, 4 total
 
 ---
 
 ## 5. Struktur Repositori & Cara Menjalankan Aplikasi Web
 
 ```text
-tutorship-app/
-├── src/                  # Kode sumber frontend React & TypeScript (Web)
-├── security/             # Dokumentasi dan asesmen Keamanan Siber
-├── crypto/               # Komponen pustaka kriptografi
-├── run-crypto.cjs        # Skrip uji otomatis kriptografi
+tutorship-nextjs/
+├── app/                  # Kode sumber frontend Next.js App Router & komponen
+├── security/             # Dokumentasi keamanan (Asset, DFD, Threat Model, Risk Register, AI Log)
+├── crypto/               # Modul pustaka kriptografi (tutorCrypto.ts & tutorCrypto.test.js)
 ├── package.json          # Konfigurasi dependensi dan skrip proyek
-└── README.md             # Dokumentasi lengkap proyek
+└── README.md             # Dokumentasi utama proyek
 ```
 
 Untuk menjalankan aplikasi web secara keseluruhan:
