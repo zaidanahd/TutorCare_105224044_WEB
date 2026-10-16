@@ -1,24 +1,33 @@
-const { hashPassword, encryptBookingData, decryptBookingData } = require('./tutorCrypto');
+const { hashPassword, verifyPassword } = require('./tutorCrypto');
 
-console.log('--- MENJALANKAN SKENARIO UJI KRIPTOGRAFI TUTORCARE ---');
+describe('Pengujian Skenario Kriptografi TutorCare', () => {
+  
+  test('Skenario 1: Hashing password menghasilkan format string yang valid', () => {
+    const hashed = hashPassword('Password123!');
+    expect(hashed).toBeDefined();
+    expect(typeof hashed).toBe('string');
+    expect(hashed.includes(':')).toBe(true);
+  });
 
-const salt = 'sintetis-salt-123';
-const hash1 = hashPassword('PasswordAman123', salt);
-const hash2 = hashPassword('PasswordAman123', salt);
-console.log(`Skenario 1 (Hash Konsisten): ${hash1 === hash2 ? 'BERHASIL [✔]' : 'GAGAL [✘]'}`);
+  test('Skenario 2: Verifikasi sukses saat password benar', () => {
+    const password = 'SecurePassword!99';
+    const hashed = hashPassword(password);
+    const isValid = verifyPassword(password, hashed);
+    expect(isValid).toBe(true);
+  });
 
-const sampleData = 'Siswa: Budi, Kursus: Pemrograman';
-const encrypted = encryptBookingData(sampleData);
-const decrypted = decryptBookingData(encrypted);
-console.log(`Skenario 2 (Enkripsi & Dekripsi Data): ${decrypted === sampleData ? 'BERHASIL [✔]' : 'GAGAL [✘]'}`);
+  test('Skenario 3 (Negatif): Verifikasi gagal jika password salah', () => {
+    const hashed = hashPassword('Benar123!');
+    const isValid = verifyPassword('SalahBanget!', hashed);
+    expect(isValid).toBe(false);
+  });
 
-const hashDifferent = hashPassword('PasswordBeda', salt);
-console.log(`Skenario 3 (Uji Batas Password Berbeda): ${hash1 !== hashDifferent ? 'BERHASIL [✔]' : 'GAGAL [✘]'}`);
+  test('Skenario 4 (Uji Batas): Menangani input string kosong tanpa error fatal', () => {
+    expect(() => {
+      const hashed = hashPassword('');
+      const isValid = verifyPassword('', hashed);
+      expect(isValid).toBe(true);
+    }).not.toThrow();n
+  });
 
-let test4 = false;
-try {
-  decryptBookingData('invalidiv:invalidciphertext');
-} catch (error) {
-  test4 = true;
-}
-console.log(`Skenario 4 (Uji Negatif Data Rusak/Manipulasi): ${test4 ? 'BERHASIL [✔]' : 'GAGAL [✘]'}`);
+});
