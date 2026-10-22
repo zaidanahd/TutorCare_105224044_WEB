@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import type { Tutor } from '../data/mockTutors';
 
 interface TutorCardProps {
@@ -13,7 +14,11 @@ export default function TutorCard({ tutor, onBook }: TutorCardProps) {
         <div className="flex gap-4 mb-4">
           <img src={tutor.avatarUrl} alt={tutor.name} className="w-16 h-16 rounded-full object-cover border-2 border-blue-200" />
           <div>
-            <h3 className="text-lg font-extrabold text-slate-900">{tutor.name}</h3>
+            <h3 className="text-lg font-extrabold text-slate-900">
+              <Link href={`/tutors/${tutor.id}`} className="hover:text-blue-600 transition">
+                {tutor.name}
+              </Link>
+            </h3>
             <span className="text-xs font-bold text-green-700 bg-green-50 px-2 py-0.5 rounded-full">✓ Verified Tutor</span>
             <p className="text-sm font-semibold text-slate-600 mt-1">{tutor.experienceYears} Tahun Pengalaman</p>
           </div>
@@ -27,17 +32,25 @@ export default function TutorCard({ tutor, onBook }: TutorCardProps) {
           <span className="bg-amber-50 text-amber-700 text-xs font-bold px-2.5 py-1 rounded-md">{tutor.mode}</span>
         </div>
         <p className="text-sm text-slate-600 bg-slate-50 p-3 rounded-xl border-l-4 border-blue-600 mb-6">
-          "{tutor.bio}"
+          &ldquo;{tutor.bio}&rdquo;
         </p>
       </div>
-      <div className="flex items-center justify-between border-t border-slate-200 pt-4 mt-auto">
+      <div className="flex items-center justify-between border-t border-slate-200 pt-4 mt-auto gap-2">
         <div>
           <span className="text-xs font-bold text-slate-400 uppercase">Tarif / Jam</span>
           <p className="text-lg font-extrabold text-slate-900">Rp {tutor.pricePerHour.toLocaleString('id-ID')}</p>
         </div>
-        <button onClick={() => onBook(tutor.name)} className="bg-[#1f6feb] text-white font-bold px-4 py-2 rounded-full text-sm hover:bg-[#134db3] transition cursor-pointer">
-          Pesan Sesi
-        </button>
+        <div className="flex items-center gap-2">
+          <Link
+            href={`/tutors/${tutor.id}`}
+            className="border border-blue-600 text-blue-600 font-bold px-3 py-2 rounded-full text-xs hover:bg-blue-50 transition"
+          >
+            Detail
+          </Link>
+          <button onClick={() => onBook(tutor.name)} className="bg-[#1f6feb] text-white font-bold px-4 py-2 rounded-full text-xs hover:bg-[#134db3] transition cursor-pointer">
+            Pesan Sesi
+          </button>
+        </div>
       </div>
     </div>
   );
