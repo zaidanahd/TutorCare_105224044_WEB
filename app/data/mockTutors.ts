@@ -3,7 +3,7 @@ export interface Tutor {
   name: string;
   subject: string;
   gradeLevel: string;
-  mode: 'Online' | 'Offline' | 'Keduanya';
+  mode: 'Online' | 'Offline' | 'Hybrid';
   pricePerHour: number;
   rating: number;
   reviewsCount: number;
@@ -14,11 +14,11 @@ export interface Tutor {
 
 export const MOCK_TUTORS: Tutor[] = [
   {
-    id: 't1',
+    id: '1',
     name: 'Sarah Amalia, S.Pd.',
     subject: 'Matematika & Fisika',
     gradeLevel: 'SMP & SMA',
-    mode: 'Keduanya',
+    mode: 'Hybrid',
     pricePerHour: 75000,
     rating: 4.9,
     reviewsCount: 28,
@@ -27,7 +27,7 @@ export const MOCK_TUTORS: Tutor[] = [
     bio: 'Sabar membimbing siswa yang kesulitan memahami rumus dasar matematika dan fisika.'
   },
   {
-    id: 't2',
+    id: '2',
     name: 'Budi Santoso, M.Kom.',
     subject: 'Pemrograman & Komputer',
     gradeLevel: 'SMA & Mahasiswa',
@@ -40,7 +40,7 @@ export const MOCK_TUTORS: Tutor[] = [
     bio: 'Mengajar logika pemrograman dasar, Python, dan web development dari nol.'
   },
   {
-    id: 't3',
+    id: '3',
     name: 'Alya Rahma, B.A.',
     subject: 'Bahasa Inggris',
     gradeLevel: 'SD & SMP',
