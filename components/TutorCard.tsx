@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import type { Tutor } from '../data/mockTutors';
+import type { Tutor } from '@/app/data/mockTutors';
 
 interface TutorCardProps {
   tutor: Tutor;
