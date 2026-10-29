@@ -2,9 +2,9 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import TutorCard from '../components/TutorCard';
-import FilterBar from '../components/FilterBar';
-import BookingModal from '../components/BookingModal';
+import TutorCard from '@/components/TutorCard';
+import FilterBar from '@/components/FilterBar';
+import BookingModal from '@/components/BookingModal';
 import { MOCK_TUTORS } from '../data/mockTutors';
 
 export default function TutorsDirectoryPage() {

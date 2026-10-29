@@ -1,11 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import Navbar from './components/Navbar';
-import FilterBar from './components/FilterBar';
-import TutorCard from './components/TutorCard';
-import BookingModal from './components/BookingModal';
-import Footer from './components/Footer';
+import Navbar from '@/components/Navbar';
+import FilterBar from '@/components/FilterBar';
+import TutorCard from '@/components/TutorCard';
+import BookingModal from '@/components/BookingModal';
+import Footer from '@/components/Footer';
 import { MOCK_TUTORS } from './data/mockTutors';
 
 export default function Page() {
