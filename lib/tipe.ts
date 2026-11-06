@@ -6,4 +6,5 @@ export type Item = {
   kategori: Kategori;
   deskripsi: string;
   tersedia: boolean;
+  gambar: string | null;
 };
