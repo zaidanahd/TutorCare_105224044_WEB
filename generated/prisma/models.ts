@@ -10,4 +10,6 @@
  */
 export type * from './models/Item'
 export type * from './models/Ulasan'
+export type * from './models/Tutor'
+export type * from './models/Booking'
 export type * from './commonInputTypes'

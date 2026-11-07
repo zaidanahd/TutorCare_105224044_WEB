@@ -16,3 +16,12 @@ export const Kategori = {
 } as const
 
 export type Kategori = (typeof Kategori)[keyof typeof Kategori]
+
+
+export const ModaBelajar = {
+  Online: 'Online',
+  Offline: 'Offline',
+  Hybrid: 'Hybrid'
+} as const
+
+export type ModaBelajar = (typeof ModaBelajar)[keyof typeof ModaBelajar]

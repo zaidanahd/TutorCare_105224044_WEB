@@ -23,12 +23,12 @@ export default function Navbar() {
         </Link>
 
         <nav>
-          <ul className="flex items-center gap-4 list-none">
+          <ul className="flex items-center gap-3 sm:gap-4 list-none">
             <li>
               <Link
                 href="/"
                 aria-current={pathname === '/' ? 'page' : undefined}
-                className={`text-base font-semibold px-3 py-2 rounded-lg transition ${pathname === '/' ? 'text-[#1f6feb] bg-[#eaf2ff]' : 'text-slate-600 hover:text-[#1f6feb]'}`}
+                className={`text-sm sm:text-base font-semibold px-3 py-2 rounded-lg transition ${pathname === '/' ? 'text-[#1f6feb] bg-[#eaf2ff]' : 'text-slate-600 hover:text-[#1f6feb]'}`}
               >
                 Beranda
               </Link>
@@ -36,27 +36,36 @@ export default function Navbar() {
             <li>
               <Link
                 href="/tutors"
-                aria-current={pathname === '/tutors' ? 'page' : undefined}
-                className={`text-base font-semibold px-3 py-2 rounded-lg transition ${pathname === '/tutors' ? 'text-[#1f6feb] bg-[#eaf2ff]' : 'text-slate-600 hover:text-[#1f6feb]'}`}
+                aria-current={pathname.startsWith('/tutors') ? 'page' : undefined}
+                className={`text-sm sm:text-base font-semibold px-3 py-2 rounded-lg transition ${pathname.startsWith('/tutors') ? 'text-[#1f6feb] bg-[#eaf2ff]' : 'text-slate-600 hover:text-[#1f6feb]'}`}
               >
                 Direktori Tutor
               </Link>
             </li>
             <li>
               <Link
-                href="/about"
-                aria-current={pathname === '/about' ? 'page' : undefined}
-                className={`text-base font-semibold px-3 py-2 rounded-lg transition ${pathname === '/about' ? 'text-[#1f6feb] bg-[#eaf2ff]' : 'text-slate-600 hover:text-[#1f6feb]'}`}
+                href="/bookings"
+                aria-current={pathname === '/bookings' ? 'page' : undefined}
+                className={`text-sm sm:text-base font-semibold px-3 py-2 rounded-lg transition ${pathname === '/bookings' ? 'text-[#1f6feb] bg-[#eaf2ff]' : 'text-slate-600 hover:text-[#1f6feb]'}`}
               >
-                Tentang Kami
+                Riwayat Pemesanan
               </Link>
             </li>
             <li>
               <Link
-                href="/tutors"
-                className="bg-[#1f6feb] text-white font-bold px-5 py-2.5 rounded-full shadow-md hover:bg-[#134db3] transition"
+                href="/about"
+                aria-current={pathname === '/about' ? 'page' : undefined}
+                className={`text-sm sm:text-base font-semibold px-3 py-2 rounded-lg transition ${pathname === '/about' ? 'text-[#1f6feb] bg-[#eaf2ff]' : 'text-slate-600 hover:text-[#1f6feb]'}`}
               >
-                Mulai Belajar →
+                Tentang Kami
+              </Link>
+            </li>
+            <li className="hidden md:inline-block">
+              <Link
+                href="/tutors/tambah"
+                className="bg-[#1f6feb] text-white font-bold text-sm px-4 py-2 rounded-full shadow hover:bg-[#134db3] transition"
+              >
+                + Jadi Tutor
               </Link>
             </li>
           </ul>

@@ -398,7 +398,9 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 export const ModelName = {
   Item: 'Item',
-  Ulasan: 'Ulasan'
+  Ulasan: 'Ulasan',
+  Tutor: 'Tutor',
+  Booking: 'Booking'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -414,7 +416,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "item" | "ulasan"
+    modelProps: "item" | "ulasan" | "tutor" | "booking"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -566,6 +568,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Tutor: {
+      payload: Prisma.$TutorPayload<ExtArgs>
+      fields: Prisma.TutorFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TutorFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TutorPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TutorFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TutorPayload>
+        }
+        findFirst: {
+          args: Prisma.TutorFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TutorPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TutorFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TutorPayload>
+        }
+        findMany: {
+          args: Prisma.TutorFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TutorPayload>[]
+        }
+        create: {
+          args: Prisma.TutorCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TutorPayload>
+        }
+        createMany: {
+          args: Prisma.TutorCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TutorCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TutorPayload>[]
+        }
+        delete: {
+          args: Prisma.TutorDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TutorPayload>
+        }
+        update: {
+          args: Prisma.TutorUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TutorPayload>
+        }
+        deleteMany: {
+          args: Prisma.TutorDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TutorUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TutorUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TutorPayload>[]
+        }
+        upsert: {
+          args: Prisma.TutorUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TutorPayload>
+        }
+        aggregate: {
+          args: Prisma.TutorAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTutor>
+        }
+        groupBy: {
+          args: Prisma.TutorGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TutorGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TutorCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TutorCountAggregateOutputType> | number
+        }
+      }
+    }
+    Booking: {
+      payload: Prisma.$BookingPayload<ExtArgs>
+      fields: Prisma.BookingFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BookingFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookingPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BookingFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookingPayload>
+        }
+        findFirst: {
+          args: Prisma.BookingFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookingPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BookingFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookingPayload>
+        }
+        findMany: {
+          args: Prisma.BookingFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookingPayload>[]
+        }
+        create: {
+          args: Prisma.BookingCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookingPayload>
+        }
+        createMany: {
+          args: Prisma.BookingCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.BookingCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookingPayload>[]
+        }
+        delete: {
+          args: Prisma.BookingDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookingPayload>
+        }
+        update: {
+          args: Prisma.BookingUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookingPayload>
+        }
+        deleteMany: {
+          args: Prisma.BookingDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BookingUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.BookingUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookingPayload>[]
+        }
+        upsert: {
+          args: Prisma.BookingUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookingPayload>
+        }
+        aggregate: {
+          args: Prisma.BookingAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBooking>
+        }
+        groupBy: {
+          args: Prisma.BookingGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BookingGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BookingCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BookingCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -628,6 +778,44 @@ export const UlasanScalarFieldEnum = {
 } as const
 
 export type UlasanScalarFieldEnum = (typeof UlasanScalarFieldEnum)[keyof typeof UlasanScalarFieldEnum]
+
+
+export const TutorScalarFieldEnum = {
+  id: 'id',
+  nama: 'nama',
+  mataPelajaran: 'mataPelajaran',
+  jenjang: 'jenjang',
+  moda: 'moda',
+  tarifPerJam: 'tarifPerJam',
+  rating: 'rating',
+  pengalamanTahun: 'pengalamanTahun',
+  avatarUrl: 'avatarUrl',
+  bio: 'bio',
+  kontakWa: 'kontakWa',
+  tersedia: 'tersedia',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TutorScalarFieldEnum = (typeof TutorScalarFieldEnum)[keyof typeof TutorScalarFieldEnum]
+
+
+export const BookingScalarFieldEnum = {
+  id: 'id',
+  kodeBooking: 'kodeBooking',
+  tutorId: 'tutorId',
+  namaSiswa: 'namaSiswa',
+  kontakSiswa: 'kontakSiswa',
+  jenjangSiswa: 'jenjangSiswa',
+  tanggalSesi: 'tanggalSesi',
+  durasiJam: 'durasiJam',
+  catatan: 'catatan',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BookingScalarFieldEnum = (typeof BookingScalarFieldEnum)[keyof typeof BookingScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -720,6 +908,20 @@ export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel
  * Reference to a field of type 'DateTime[]'
  */
 export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+/**
+ * Reference to a field of type 'ModaBelajar'
+ */
+export type EnumModaBelajarFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ModaBelajar'>
+    
+
+
+/**
+ * Reference to a field of type 'ModaBelajar[]'
+ */
+export type ListEnumModaBelajarFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ModaBelajar[]'>
     
 
 
@@ -889,6 +1091,8 @@ export type PrismaClientOptions = PrismaClientOptionsWithAccelerateUrl | PrismaC
 export type GlobalOmitConfig = {
   item?: Prisma.ItemOmit
   ulasan?: Prisma.UlasanOmit
+  tutor?: Prisma.TutorOmit
+  booking?: Prisma.BookingOmit
 }
 
 /* Types for Logging */

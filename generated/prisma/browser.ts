@@ -27,3 +27,13 @@ export type Item = Prisma.ItemModel
  * 
  */
 export type Ulasan = Prisma.UlasanModel
+/**
+ * Model Tutor
+ * 
+ */
+export type Tutor = Prisma.TutorModel
+/**
+ * Model Booking
+ * 
+ */
+export type Booking = Prisma.BookingModel

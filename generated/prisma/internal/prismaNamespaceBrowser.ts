@@ -52,7 +52,9 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   Item: 'Item',
-  Ulasan: 'Ulasan'
+  Ulasan: 'Ulasan',
+  Tutor: 'Tutor',
+  Booking: 'Booking'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -94,6 +96,44 @@ export const UlasanScalarFieldEnum = {
 } as const
 
 export type UlasanScalarFieldEnum = (typeof UlasanScalarFieldEnum)[keyof typeof UlasanScalarFieldEnum]
+
+
+export const TutorScalarFieldEnum = {
+  id: 'id',
+  nama: 'nama',
+  mataPelajaran: 'mataPelajaran',
+  jenjang: 'jenjang',
+  moda: 'moda',
+  tarifPerJam: 'tarifPerJam',
+  rating: 'rating',
+  pengalamanTahun: 'pengalamanTahun',
+  avatarUrl: 'avatarUrl',
+  bio: 'bio',
+  kontakWa: 'kontakWa',
+  tersedia: 'tersedia',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TutorScalarFieldEnum = (typeof TutorScalarFieldEnum)[keyof typeof TutorScalarFieldEnum]
+
+
+export const BookingScalarFieldEnum = {
+  id: 'id',
+  kodeBooking: 'kodeBooking',
+  tutorId: 'tutorId',
+  namaSiswa: 'namaSiswa',
+  kontakSiswa: 'kontakSiswa',
+  jenjangSiswa: 'jenjangSiswa',
+  tanggalSesi: 'tanggalSesi',
+  durasiJam: 'durasiJam',
+  catatan: 'catatan',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BookingScalarFieldEnum = (typeof BookingScalarFieldEnum)[keyof typeof BookingScalarFieldEnum]
 
 
 export const SortOrder = {

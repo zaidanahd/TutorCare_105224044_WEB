@@ -1,5 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// Prisma Schema untuk TutorCare
+// Mendukung Praktikum Pemweb (Item & Ulasan) dan Tugas 2 Pemweb (Tutor & Booking)
 
 generator client {
   provider = "prisma-client"
@@ -9,6 +9,8 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+// === ENTITAS PRAKTIKUM (MODUL 5 & 6) ===
 
 enum Kategori {
   energi
@@ -37,4 +39,46 @@ model Ulasan {
   item       Item      @relation(fields: [itemId], references: [id], onDelete: Restrict)
 
   @@unique([itemId, nama])
+}
+
+// === ENTITAS UTAMA PRODUK TUTORCARE (TUGAS 2 / MILESTONE 2) ===
+
+enum ModaBelajar {
+  Online
+  Offline
+  Hybrid
+}
+
+model Tutor {
+  id              Int          @id @default(autoincrement())
+  nama            String
+  mataPelajaran   String
+  jenjang         String       @default("SMP & SMA")
+  moda            ModaBelajar  @default(Hybrid)
+  tarifPerJam     Int
+  rating          Float        @default(5.0)
+  pengalamanTahun Int          @default(3)
+  avatarUrl       String?
+  bio             String
+  kontakWa        String       @default("081234567890")
+  tersedia        Boolean      @default(true)
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  bookings        Booking[]
+}
+
+model Booking {
+  id           Int         @id @default(autoincrement())
+  kodeBooking  String      @unique
+  tutorId      Int
+  tutor        Tutor       @relation(fields: [tutorId], references: [id], onDelete: Cascade)
+  namaSiswa    String
+  kontakSiswa  String
+  jenjangSiswa String      @default("SMA")
+  tanggalSesi  DateTime
+  durasiJam    Int         @default(2)
+  catatan      String?
+  status       String      @default("Menunggu Konfirmasi")
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
 }
