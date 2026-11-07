@@ -1,0 +1,213 @@
+{
+  "$schema": "http://cyclonedx.org/schema/bom-1.5.schema.json",
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "serialNumber": "urn:uuid:8a9f3f20-f90c-43c2-a7b0-9b491a822aad-tutorcare-sec-0.2",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-11-06T20:15:00Z",
+    "tools": [
+      {
+        "vendor": "CycloneDX",
+        "name": "cdxgen",
+        "version": "10.0.3"
+      }
+    ],
+    "authors": [
+      {
+        "name": "Ahmad Zaidan",
+        "email": "ahmadzaidan0512@gmail.com"
+      }
+    ],
+    "component": {
+      "type": "application",
+      "bom-ref": "pkg:npm/tutorcare@0.2.0",
+      "name": "tutorcare",
+      "version": "0.2.0",
+      "description": "TutorCare Platform - Educational Mentorship Product (Hardened Release sec-0.2)",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/tutorcare@0.2.0"
+    }
+  },
+  "components": [
+    {
+      "type": "framework",
+      "bom-ref": "pkg:npm/next@16.4.1",
+      "name": "next",
+      "version": "16.4.1",
+      "description": "The React Framework for the Web",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/next@16.4.1",
+      "scope": "required"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/react@19.3.0",
+      "name": "react",
+      "version": "19.3.0",
+      "description": "React is a JavaScript library for building user interfaces.",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/react@19.3.0",
+      "scope": "required"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/react-dom@19.3.0",
+      "name": "react-dom",
+      "version": "19.3.0",
+      "description": "React package for working with the DOM.",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/react-dom@19.3.0",
+      "scope": "required"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/@prisma/client@7.10.1",
+      "name": "@prisma/client",
+      "version": "7.10.1",
+      "description": "Prisma Client is an auto-generated, type-safe and modern JavaScript/TypeScript ORM",
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ],
+      "purl": "pkg:npm/%40prisma/client@7.10.1",
+      "scope": "required"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/@prisma/adapter-pg@7.10.1",
+      "name": "@prisma/adapter-pg",
+      "version": "7.10.1",
+      "description": "Prisma driver adapter for pg (node-postgres)",
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ],
+      "purl": "pkg:npm/%40prisma/adapter-pg@7.10.1",
+      "scope": "required"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/pg@8.23.1",
+      "name": "pg",
+      "version": "8.23.1",
+      "description": "PostgreSQL client for Node.js",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/pg@8.23.1",
+      "scope": "required"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/zod@4.6.7",
+      "name": "zod",
+      "version": "4.6.7",
+      "description": "TypeScript-first schema validation with static type inference",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/zod@4.6.7",
+      "scope": "required"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/server-only@0.0.1",
+      "name": "server-only",
+      "version": "0.0.1",
+      "description": "Ensure module is only executed on the server in Next.js",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/server-only@0.0.1",
+      "scope": "required"
+    },
+    {
+      "type": "operating-system",
+      "bom-ref": "pkg:generic/alpine-linux@3.19.1",
+      "name": "Alpine Linux",
+      "version": "3.19.1",
+      "description": "Security-oriented, lightweight Linux distribution based on musl libc and busybox",
+      "licenses": [
+        {
+          "license": {
+            "id": "GPL-2.0-only"
+          }
+        }
+      ],
+      "purl": "pkg:generic/alpine-linux@3.19.1"
+    },
+    {
+      "type": "platform",
+      "bom-ref": "pkg:generic/node@20.18.0",
+      "name": "Node.js Runtime",
+      "version": "20.18.0",
+      "description": "JavaScript runtime built on Chrome's V8 engine",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:generic/node@20.18.0"
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "pkg:npm/tutorcare@0.2.0",
+      "dependsOn": [
+        "pkg:npm/next@16.4.1",
+        "pkg:npm/react@19.3.0",
+        "pkg:npm/react-dom@19.3.0",
+        "pkg:npm/@prisma/client@7.10.1",
+        "pkg:npm/@prisma/adapter-pg@7.10.1",
+        "pkg:npm/pg@8.23.1",
+        "pkg:npm/zod@4.6.7",
+        "pkg:npm/server-only@0.0.1"
+      ]
+    }
+  ]
+}

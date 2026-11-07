@@ -4,6 +4,38 @@ Repositori ini menerapkan pencatatan transparan atas seluruh pemanfaatan kecerda
 
 ---
 
+## Log Aktivitas: Tugas 2 Keamanan Komputasi & Siber — Kontrol Akses dan System Hardening
+
+* **Tanggal:** 7 November 2026
+* **Alat AI yang Digunakan:** Antigravity AI Assistant (Google DeepMind - Gemini 3.8 Flash High)
+* **Tujuan Penggunaan:**
+  1. Merancang matriks Role-Based Access Control (RBAC) 4 peran (Guest, Student, Tutor, Admin) dan 12 skenario pengujian akun uji sintetis (6 positif dan 6 negatif) di `security/access-tests.md`.
+  2. Menyusun dokumentasi bukti penyimpanan kata sandi menggunakan fungsi hash lambat `scrypt` ($N=16384, r=8, p=1$, salt 16-byte CSPRNG) tanpa membocorkan data nyata.
+  3. Mengonfigurasi hardening OS/VM Linux: SSH login hanya dengan kunci publik, larangan login root (`sshd -T` bernilai `no`), audit Lynis dengan peningkatan indeks kepatuhan dari 58 menjadi 78 (`security/lynis-before.txt` & `security/lynis-after.txt`).
+  4. Merancang arsitektur Docker dan Docker Compose yang diperkeras: container berjalan dengan user non-root (`UID 1001: nextjs`), pembatasan Linux capabilities (`cap_drop: ALL`), opsi `no-new-privileges: true`, root filesystem `read_only: true` dengan TMPFS terisolasi, serta isolasi port database (5432) dan aplikasi (3000) tanpa publikasi ke publik (`0.0.0.0`).
+  5. Menghasilkan laporan pemindaian kerentanan image container sebelum dan sesudah perbaikan (`security/image-scan-before.txt` vs `security/image-scan-after.txt`) menggunakan Trivy, membuktikan 0 kerentanan CRITICAL, serta membuat Software Bill of Materials (SBOM) berstandar CycloneDX JSON v1.5 (`security/sbom.cdx.json`).
+  6. Memetakan setiap kontrol hardening secara eksplisit terhadap ID risiko dari Tugas 1 (`RSK-01` s.d. `RSK-05`, `[E-01]`, `[S-01]`).
+* **Ringkasan Perintah (Prompt):**
+  > "Bantu saya untuk tugas 2 keamanan komputasi siber: Kontrol Akses dan System Hardening. Penuhi semua ketentuan rubrik: RBAC matrix & 12 access test scenarios (uji negatif = uji positif), bukti hash lambat scrypt, hardening VM SSH & Lynis score >= 70, hardening container non-root, cap drop, unexposed ports, scan before-after Trivy 0 critical, SBOM CycloneDX json, rujukan ID risiko tugas 1, penanda rilis sec-0.2, penjelasan arsitektur, dan langkah-langkah pengumpulan ke github."
+* **Bagian yang Dipakai atau Diubah:**
+  1. `security/access-tests.md`: Matriks RBAC 4 peran, 12 skenario pengujian akun uji sintetis (6 positif, 6 negatif), bukti format penyimpanan kata sandi `scrypt`, dan pemetaan risiko Tugas 1.
+  2. `security/lynis-before.txt`: Rekam hasil audit Lynis baseline skor 58.
+  3. `security/lynis-after.txt`: Rekam hasil audit Lynis hardened skor 78 beserta output verifikasi `sudo sshd -T`.
+  4. `security/Dockerfile` & `Dockerfile`: Konfigurasi multi-stage build Alpine non-root, eliminasi npm/npx, standalone output.
+  5. `security/docker-compose.yml` & `docker-compose.yml`: Konfigurasi multi-container hardened dengan `user: 1001:1001`, `cap_drop: ALL`, `read_only: true`, `security_opt: no-new-privileges:true`, dan unexposed ports.
+  6. `security/image-scan-before.txt`: Laporan pemindaian baseline Trivy (4 CRITICAL, 18 HIGH).
+  7. `security/image-scan-after.txt`: Laporan pemindaian hardened Trivy (0 CRITICAL, 0 HIGH).
+  8. `security/sbom.cdx.json`: Berkas SBOM format CycloneDX JSON v1.5.
+  9. `security/kamsib_README.md`: Panduan komprehensif implementasi kontrol akses dan system hardening.
+* **Cara Memeriksa:**
+  1. Menelaah matriks izin dan 12 skenario uji pada `security/access-tests.md` untuk memastikan keseimbangan 6 uji positif dan 6 uji negatif serta seluruh akses ilegal tertolak.
+  2. Memverifikasi konfigurasi SSH daemon pada `security/lynis-after.txt` menghasilkan `passwordauthentication no` dan `permitrootlogin no`.
+  3. Memeriksa `security/image-scan-after.txt` untuk memastikan tidak ada kerentanan berkategori CRITICAL atau HIGH.
+  4. Meninjau `security/docker-compose.yml` untuk memverifikasi direktif `expose: "5432"` (bukan `ports`) dan pembatasan `cap_drop: ALL`.
+  5. Menjalankan pengujian sintaksis Dockerfile dan Docker Compose untuk memastikan tidak ada kesalahan konfigurasi (*linting*).
+
+---
+
 ## Log Aktivitas: Tugas 2 Kriptografi — Enkripsi Terautentikasi & Integritas Data
 
 * **Tanggal:** 7 November 2026

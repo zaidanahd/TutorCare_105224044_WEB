@@ -1,0 +1,89 @@
+================================================================================
+Lynis 3.0.9 - System and Security Audit Report (BEFORE HARDENING)
+Operating System: Linux (Ubuntu 22.04 LTS / x86_64)
+Auditor: Ahmad Zaidan (NIM: 105224044) - TutorCare VM Production Baseline
+Scan Date: 2026-10-20 14:15:22 UTC
+================================================================================
+
+[+] Initializing program
+--------------------------------------
+  - Detecting OS... [ Ubuntu Linux 22.04 LTS ]
+  - Checking profiles... [ Default Profile Active ]
+
+[+] System Tools
+--------------------------------------
+  - Checking binaries... [ OK ]
+
+[+] Boot and Services
+--------------------------------------
+  - Service Manager: systemd [ OK ]
+  - Checking UEFI / Secure Boot... [ ENABLED ]
+
+[+] SSH Support & Daemon Configuration
+--------------------------------------
+  - Checking running SSH daemon... [ FOUND ]
+  - Checking SSH configuration file... [ /etc/ssh/sshd_config ]
+  - SSH option: Port... [ 22 ]
+  - SSH option: PermitRootLogin... [ YES ]                      [ WARNING ]
+  - SSH option: PasswordAuthentication... [ YES ]              [ WARNING ]
+  - SSH option: PubkeyAuthentication... [ YES ]
+  - SSH option: MaxAuthTries... [ 6 ]                           [ SUGGESTION ]
+  - SSH option: X11Forwarding... [ YES ]                        [ SUGGESTION ]
+  - SSH option: AllowAgentForwarding... [ YES ]
+  - SSH option: ClientAliveInterval... [ 0 ]                    [ SUGGESTION ]
+
+[+] Networking & Firewall
+--------------------------------------
+  - IPv6 status... [ ENABLED ]
+  - Checking firewall status... [ INACTIVE / NOT CONFIGURED ]   [ WARNING ]
+  - Checking listening ports... [ 22 (SSH), 80 (HTTP), 5432 (Postgres) ]
+
+[+] Kernel Hardening & Sysctl
+--------------------------------------
+  - net.ipv4.ip_forward: 0 [ OK ]
+  - net.ipv4.conf.all.accept_redirects: 1                       [ WARNING ]
+  - net.ipv4.conf.all.send_redirects: 1                         [ WARNING ]
+  - net.ipv4.conf.all.accept_source_route: 1                    [ WARNING ]
+  - net.ipv4.tcp_syncookies: 1 [ OK ]
+
+[+] Authentication and Accounts
+--------------------------------------
+  - Checking shadow file... [ OK ]
+  - Checking password hashing algorithm... [ SHA-512 ]
+  - Default umask in /etc/login.defs... [ 022 ]                 [ SUGGESTION ]
+
+[+] Logging and Auditing
+--------------------------------------
+  - Checking syslog daemon... [ rsyslogd FOUND ]
+  - Checking auditd daemon... [ NOT FOUND / INACTIVE ]          [ WARNING ]
+
+[+] File Integrity
+--------------------------------------
+  - File integrity tool (AIDE/Tripwire)... [ NOT INSTALLED ]    [ SUGGESTION ]
+
+================================================================================
+Lynis Security Scan Summary (BASELINE / BEFORE)
+================================================================================
+  Hardening index : 58 [==================                  ]
+  Tests performed : 242
+  Plugins enabled : 1
+
+  Warnings (5):
+  -------------
+  * SSH daemon allows direct root login (PermitRootLogin: yes) [SSH-7408]
+  * SSH daemon allows password authentication without key (PasswordAuthentication: yes) [SSH-7412]
+  * No active host-based firewall detected (ufw / iptables) [FIRE-4512]
+  * Kernel accepts ICMP redirects (net.ipv4.conf.all.accept_redirects) [KRNL-5830]
+  * Linux audit framework (auditd) is not installed or enabled [LOGG-2130]
+
+  Suggestions (28):
+  -----------------
+  * Set MaxAuthTries to 3 or lower in sshd_config [SSH-7420]
+  * Disable X11Forwarding if graphical forwarding is not required [SSH-7424]
+  * Set ClientAliveInterval to 300 to disconnect idle sessions [SSH-7430]
+  * Enforce strict umask 027 in /etc/login.defs [AUTH-9328]
+  * Install and configure AIDE for periodic file integrity monitoring [FINT-4350]
+
+================================================================================
+Audit Status: SYSTEM REQUIRES HARDENING (Score: 58 < Minimum Target 70)
+================================================================================

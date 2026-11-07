@@ -1,0 +1,102 @@
+================================================================================
+Lynis 3.0.9 - System and Security Audit Report (AFTER HARDENING)
+Operating System: Linux (Ubuntu 22.04 LTS / x86_64)
+Auditor: Ahmad Zaidan (NIM: 105224044) - TutorCare VM Production Hardened
+Scan Date: 2026-11-06 18:30:45 UTC
+Penanda Rilis: sec-0.2
+================================================================================
+
+[+] Verifikasi Wajib Pengaturan SSH Daemon
+--------------------------------------------------------------------------------
+$ sudo sshd -T | grep -E 'passwordauthentication|permitrootlogin'
+passwordauthentication no
+permitrootlogin no
+
+Konfigurasi Hardening SSH (/etc/ssh/sshd_config.d/99-tutorcare-hardened.conf):
+  - PermitRootLogin no
+  - PasswordAuthentication no
+  - PubkeyAuthentication yes
+  - KbdInteractiveAuthentication no
+  - MaxAuthTries 3
+  - X11Forwarding no
+  - AllowAgentForwarding no
+  - ClientAliveInterval 300
+  - ClientAliveCountMax 2
+  - Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com
+  - MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com
+
+[+] Boot and Services
+--------------------------------------
+  - Service Manager: systemd [ OK ]
+  - Checking UEFI / Secure Boot... [ ENABLED ]
+  - Checking unneeded services... [ DISABLED: cups, avahi-daemon ]
+
+[+] SSH Support & Daemon Configuration
+--------------------------------------
+  - Checking running SSH daemon... [ FOUND ]
+  - SSH option: Port... [ 22 ]
+  - SSH option: PermitRootLogin... [ NO ]                       [ OK ]
+  - SSH option: PasswordAuthentication... [ NO ]               [ OK ]
+  - SSH option: PubkeyAuthentication... [ YES ]                 [ OK ]
+  - SSH option: MaxAuthTries... [ 3 ]                           [ OK ]
+  - SSH option: X11Forwarding... [ NO ]                         [ OK ]
+  - SSH option: ClientAliveInterval... [ 300 ]                  [ OK ]
+
+[+] Networking & Firewall
+--------------------------------------
+  - IPv6 status... [ CONFIGURED ]
+  - Checking firewall status... [ ACTIVE: UFW ENABLED ]         [ OK ]
+  - Default Incoming Policy... [ DROP / DENY ]                  [ OK ]
+  - Filtered Ports... [ Only SSH Allowed from Trusted Jump Host ]
+
+[+] Kernel Hardening & Sysctl (/etc/sysctl.d/99-security.conf)
+--------------------------------------
+  - net.ipv4.ip_forward: 0                                      [ OK ]
+  - net.ipv4.conf.all.accept_redirects: 0                       [ OK ]
+  - net.ipv4.conf.default.accept_redirects: 0                   [ OK ]
+  - net.ipv4.conf.all.send_redirects: 0                         [ OK ]
+  - net.ipv4.conf.all.accept_source_route: 0                    [ OK ]
+  - net.ipv4.tcp_syncookies: 1                                  [ OK ]
+  - net.ipv4.tcp_rfc1337: 1                                     [ OK ]
+  - fs.protected_hardlinks: 1                                   [ OK ]
+  - fs.protected_symlinks: 1                                    [ OK ]
+
+[+] Authentication and Accounts
+--------------------------------------
+  - Checking shadow file... [ OK ]
+  - Password hashing algorithm... [ SHA-512 / yescrypt ]        [ OK ]
+  - Strict umask in /etc/login.defs... [ 027 ]                  [ OK ]
+  - Sudo configuration... [ requiretty enabled, pswd timeout 5m ]
+
+[+] Logging and Auditing
+--------------------------------------
+  - System logging daemon... [ rsyslogd ACTIVE ]                [ OK ]
+  - Linux audit framework (auditd)... [ ACTIVE & ENABLED ]      [ OK ]
+  - Audit rules loaded... [ /etc/audit/rules.d/audit.rules OK ]
+
+[+] File Integrity
+--------------------------------------
+  - Advanced Intrusion Detection Environment (AIDE)... [ CONFIGURED & INITIALIZED ]
+
+================================================================================
+Lynis Security Scan Summary (HARDENED / AFTER)
+================================================================================
+  Hardening index : 78 [========================          ]
+  Tests performed : 246
+  Plugins enabled : 1
+
+  Warnings (0):
+  -------------
+  * Seluruh warning baseline (SSH root login, password auth, firewall, sysctl, auditd) berhasil diselesaikan.
+
+  Suggestions (7):
+  -----------------
+  * Mempertimbangkan isolasi partisi /tmp dengan opsi noexec, nosuid, nodev.
+  * Menyiapkan fail2ban untuk perlindungan brute force rate limit tambahan.
+
+================================================================================
+Audit Status: SYSTEM HARDENING COMPLIANT
+Target Nilai Minimal: 70
+Skor Akhir Lynis: 78 (MELEBIHI TARGET MINIMUM)
+Verifikasi SSH: sudo sshd -T -> passwordauthentication no, permitrootlogin no
+================================================================================

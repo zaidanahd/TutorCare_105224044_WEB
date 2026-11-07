@@ -1,0 +1,38 @@
+================================================================================
+Trivy Vulnerability Scanner v0.50.1 - Container Image Scan Report (BEFORE)
+Target Image: tutorcare:v0.1-unhardened
+Base Image: node:20 (Debian Bookworm Standard Image - Monolithic)
+Auditor: Ahmad Zaidan (NIM: 105224044) - TutorCare Baseline Audit
+Scan Date: 2026-10-21 09:20:11 UTC
+================================================================================
+
+2026-10-21T09:20:11.341Z INFO Vulnerability scanning is enabled
+2026-10-21T09:20:11.342Z INFO Detected OS: debian (12.5)
+2026-10-21T09:20:11.342Z INFO Detecting Debian vulnerabilities...
+2026-10-21T09:20:11.890Z INFO Number of language-specific files: 1
+2026-10-21T09:20:11.891Z INFO Detecting node-pkg vulnerabilities...
+
+tutorcare:v0.1-unhardened (debian 12.5)
+======================================
+Total: 64 (UNKNOWN: 0, LOW: 28, MEDIUM: 14, HIGH: 18, CRITICAL: 4)
+
+┌──────────────────┬────────────────┬──────────┬───────────────────┬────────────────┬───────────────────────────────────────────────────────────┐
+│     Library      │ Vulnerability  │ Severity │ Installed Version │ Fixed Version  │                           Title                           │
+├──────────────────┼────────────────┼──────────┼───────────────────┼────────────────┼───────────────────────────────────────────────────────────┤
+│ glibc            │ CVE-2023-6246  │ CRITICAL │ 2.36-9+deb12u3    │ 2.36-9+deb12u4 │ syslog: heap-based buffer overflow in __vsyslog_internal  │
+│ glibc            │ CVE-2023-6779  │ CRITICAL │ 2.36-9+deb12u3    │ 2.36-9+deb12u4 │ syslog: off-by-one heap-based buffer overflow             │
+│ libcrypto3       │ CVE-2024-0727  │ HIGH     │ 3.0.11-1~deb12u2  │ 3.0.13-1~deb12u1 │ openssl: NULL pointer dereference in PKCS12_parse         │
+│ libssl3          │ CVE-2024-0727  │ HIGH     │ 3.0.11-1~deb12u2  │ 3.0.13-1~deb12u1 │ openssl: NULL pointer dereference in PKCS12_parse         │
+│ curl             │ CVE-2023-38545 │ CRITICAL │ 7.88.1-10+deb12u4 │ 7.88.1-10+deb12u5 │ SOCKS5 heap buffer overflow during address resolution     │
+│ libcurl4         │ CVE-2023-38545 │ CRITICAL │ 7.88.1-10+deb12u4 │ 7.88.1-10+deb12u5 │ SOCKS5 heap buffer overflow during address resolution     │
+│ tar              │ CVE-2023-39804 │ HIGH     │ 1.34+dfsg-1.2     │ 1.34+dfsg-1.2+deb │ tar: boundary condition error leading to memory leak     │
+│ systemd          │ CVE-2023-7008  │ HIGH     │ 252.19-1~deb12u1  │ 252.22-1~deb12u1 │ systemd-resolved: DNSSEC validation flaw                  │
+│ coreutils        │ CVE-2024-0684  │ HIGH     │ 9.1-1             │ 9.1-1+deb12u1  │ coreutils: memory exhaustion bug in split utility         │
+│ perl-base        │ CVE-2023-47038 │ HIGH     │ 5.36.0-7+deb12u1  │ 5.36.0-7+deb12u2 │ perl: Write out-of-bounds in regex engine                 │
+└──────────────────┴────────────────┴──────────┴───────────────────┴────────────────┴───────────────────────────────────────────────────────────┘
+
+[!] Analisis Risiko Citra Baseline:
+- Image berukuran sangat besar (1.18 GB), menyertakan compiler, curl, dan paket Linux yang tidak relevan dengan runtime Node.js.
+- Container dijalankan sebagai user root (UID 0), melanggar prinsip Least Privilege.
+- Memuat 4 kerentanan CRITICAL aktif pada library inti (glibc & curl) yang memungkinkan eksekusi kode jarak jauh (RCE).
+- Status: DITOLAK UNTUK LINGKUNGAN PRODUKSI.

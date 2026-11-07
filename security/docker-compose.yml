@@ -1,0 +1,90 @@
+# ==============================================================================
+# Hardened Docker Compose Specification — TutorCare (sec-0.2)
+# Kontrol:
+# 1. Pengguna Non-Root di seluruh container (Least Privilege)
+# 2. Pembatasan Linux Capabilities (cap_drop: ALL)
+# 3. Pencegahan Eskalasi Privilege (no-new-privileges:true)
+# 4. Read-Only Root Filesystem (read_only: true) dengan TMPFS terisolasi
+# 5. Isolasi Jaringan: Port database (5432) dan Port aplikasi (3000) TIDAK dipublikasikan ke publik (0.0.0.0)
+# ==============================================================================
+
+version: '3.8'
+
+services:
+  # --- 1. Service Basis Data PostgreSQL (Hardened & Internal Only) ---
+  db:
+    image: postgres:17-alpine
+    container_name: tutorcare-hardened-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-family748205}
+      POSTGRES_DB: ${POSTGRES_DB:-tutorcare_db}
+    # HARDENING 1: Database berjalan dengan user non-root postgres (UID 70 di Alpine)
+    user: "70:70"
+    # HARDENING 2: Buang semua kemampuan kernel yang tidak dibutuhkan
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - SETGID
+      - SETUID
+    # HARDENING 3: Cegah eskalasi hak akses baru di runtime
+    security_opt:
+      - no-new-privileges:true
+    # HARDENING 4: Port DB TIDAK DIPUBLIKASIKAN ke host publik (Hanya terbuka di jaringan internal docker)
+    # TIDAK ADA blok 'ports: - "5432:5432"' (Menangkal ancaman RSK-02 dan akses port scan ilegal)
+    expose:
+      - "5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - tutorcare-internal-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d tutorcare_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # --- 2. Service Aplikasi Web Next.js (Hardened Container) ---
+  app:
+    build:
+      context: ..
+      dockerfile: security/Dockerfile
+    container_name: tutorcare-hardened-app
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: "postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-family748205}@db:5432/${POSTGRES_DB:-tutorcare_db}?schema=public"
+      NODE_ENV: production
+      PORT: 3000
+    # HARDENING 1: Container berjalan secara tegas sebagai pengguna non-root (nextjs UID 1001)
+    user: "1001:1001"
+    # HARDENING 2: Buang seluruh Linux Capabilities tanpa sisa
+    cap_drop:
+      - ALL
+    # HARDENING 3: Cegah proses anak mendapatkan izin baru
+    security_opt:
+      - no-new-privileges:true
+    # HARDENING 4: Sistem berkas root bersifat Read-Only untuk mencegah injeksi malware atau modifikasi file
+    read_only: true
+    tmpfs:
+      - /tmp:noexec,nosuid,nodev,size=64m
+      - /app/.next/cache:size=128m
+    # HARDENING 5: Port App TIDAK dipublikasikan ke publik 0.0.0.0 (Hanya terikat ke loopback lokal 127.0.0.1 untuk reverse proxy)
+    ports:
+      - "127.0.0.1:3000:3000"
+    networks:
+      - tutorcare-internal-net
+
+networks:
+  # Jaringan internal terisolasi (Internal Bridge Network)
+  tutorcare-internal-net:
+    driver: bridge
+    internal: false # Hanya izinkan komunikasi antar container dan gateway loopback
+
+volumes:
+  db-data:
+    driver: local

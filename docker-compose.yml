@@ -1,0 +1,70 @@
+# Hardened Docker Compose — TutorCare (sec-0.2)
+# Sumber utama dan dokumentasi: security/docker-compose.yml
+version: '3.8'
+
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: tutorcare-hardened-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-family748205}
+      POSTGRES_DB: ${POSTGRES_DB:-tutorcare_db}
+    user: "70:70"
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - SETGID
+      - SETUID
+    security_opt:
+      - no-new-privileges:true
+    # Port TIDAK dipublikasikan ke host publik
+    expose:
+      - "5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - tutorcare-internal-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d tutorcare_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: tutorcare-hardened-app
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: "postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-family748205}@db:5432/${POSTGRES_DB:-tutorcare_db}?schema=public"
+      NODE_ENV: production
+      PORT: 3000
+    user: "1001:1001"
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /tmp:noexec,nosuid,nodev,size=64m
+      - /app/.next/cache:size=128m
+    # Port hanya terikat ke 127.0.0.1 (tidak terbuka ke publik 0.0.0.0)
+    ports:
+      - "127.0.0.1:3000:3000"
+    networks:
+      - tutorcare-internal-net
+
+networks:
+  tutorcare-internal-net:
+    driver: bridge
+
+volumes:
+  db-data:
+    driver: local
