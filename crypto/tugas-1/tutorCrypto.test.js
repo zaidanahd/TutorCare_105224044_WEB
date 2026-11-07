@@ -1,8 +1,8 @@
 const { hashPassword, verifyPassword } = require('./tutorCrypto');
 
-describe('Pengujian Skenario Kriptografi TutorCare', () => {
+describe('Tugas 1 Kriptografi: Pengujian Hashing Password TutorCare', () => {
   
-  test('Skenario 1: Hashing password menghasilkan format string yang valid', () => {
+  test('Skenario 1: Hashing password menghasilkan format string yang valid (salt:hash)', () => {
     const hashed = hashPassword('Password123!');
     expect(hashed).toBeDefined();
     expect(typeof hashed).toBe('string');
@@ -27,7 +27,7 @@ describe('Pengujian Skenario Kriptografi TutorCare', () => {
       const hashed = hashPassword('');
       const isValid = verifyPassword('', hashed);
       expect(isValid).toBe(true);
-    }).not.toThrow();n
+    }).not.toThrow();
   });
 
 });

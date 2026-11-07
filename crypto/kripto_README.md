@@ -1,90 +1,121 @@
-# TutorCare: Modul Kriptografi & Keamanan Data (Tugas 1)
+# TutorCare: Modul Kriptografi & Keamanan Data
 
-Repositori ini berisi implementasi **Tugas 1 — Fondasi dan Komponen Dasar Kriptografi** untuk produk bersama **TutorCare** (Platform Penghubung Siswa dan Tutor Akademik). Modul ini diintegrasikan ke dalam repositori aplikasi web dengan menerapkan standar keamanan kriptografi modern.
-
----
-
-## 1. Deskripsi Produk
-**TutorCare** adalah platform berbasis web interaktif yang dirancang untuk mempertemukan siswa dengan tutor privat berkualitas secara transparan dan aman. Mengingat platform ini mengelola data sensitif pengguna (seperti kredensial akun dan catatan sesi bimbingan transien), sistem memerlukan lapisan perlindungan data yang kuat menggunakan pustaka kriptografi terstandar tanpa mengandalkan sandi klasik yang rentan.
+Modul keamanan kriptografi untuk produk **TutorCare** (Platform Edukasi & Bimbingan Belajar). Direktori ini diorganisasi secara modular untuk memisahkan implementasi **Tugas 1** dan **Tugas 2**.
 
 ---
 
-## 2. Tabel Kebutuhan Kriptografi
-Sesuai ketentuan minimum, berikut adalah analisis kebutuhan kriptografi untuk minimal 3 jenis aset data di dalam sistem TutorCare:
+## Struktur Folder Kriptografi
 
-| No | Target Data / Aset | Tujuan Keamanan (Security Goal) | Algoritma / Mekanisme | Prioritas |
-|:--:|:---|:---|:---|:--:|
-| 1 | **Password Pengguna** | Melindungi kredensial autentikasi dari serangan *dictionary*, *brute-force*, dan *rainbow table* saat disimpan di database. | Node.js `crypto.scryptSync` dengan *unique salt* (16-byte) dan parameter keamanan tinggi | **Tinggi** |
-| 2 | **Data Transien / Sesi Booking** | Menjaga kerahasiaan (*confidentiality*) dan keutuhan catatan sesi bimbingan siswa selama proses transien. | Enkripsi simetris berbasis modul `crypto` dengan *randomized Initialization Vector* (IV) | **Tinggi** |
-| 3 | **Token Akses & Sesi** | Memastikan keaslian token otorisasi serta mencegah manipulasi atau pemalsuan oleh pihak tak berwenang. | HMAC-SHA256 Signatures | **Sedang** |
-
----
-
-## 3. Rancangan Komponen Kriptografi
-
-### **A. Alur Masukan $\rightarrow$ Proses $\rightarrow$ Keluaran**
-- **Hashing Password (Scrypt & Salt):**
-  * *Masukan:* `Password Teks Biasa` + `Unique Salt` (16 bytes)
-  * *Proses:* Penurunan kunci berbasis fungsi *key derivation function* (scrypt) menggunakan modul keamanan standar Node.js.
-  * *Keluaran:* Format string gabungan `salt:hash` heksadesimal yang aman untuk disimpan.
-- **Verifikasi Kredensial:**
-  * *Masukan:* `Password Input` + `Stored Salt:Hash`
-  * *Proses:* Komparasi aman menggunakan `crypto.timingSafeEqual` untuk mencegah serangan *timing attack*.
-  * *Keluaran:* Nilai boolean (`true` / `false`).
-
-### **B. Representasi Data**
-- Seluruh data hasil enkripsi dan *hash* direpresentasikan dalam format **Hexadecimal String** (`Buffer.toString('hex')`) agar aman ditransmisikan dan disimpan ke dalam media penyimpanan berbasis teks.
-
-### **C. Sumber Keacakan (Source of Randomness)**
-- Pembuatan *Salt* dan komponen acak pengaman menggunakan generator bilangan acak kriptografi aman bawaan Node.js, yaitu **`crypto.randomBytes()`**, untuk memastikan nilai keacakan tidak dapat ditebak (*unpredictable*).
+```text
+crypto/
+├── tugas-1/                          # Direktori Khusus Tugas 1: Fondasi Kriptografi (Tag: crypto/v0.1)
+│   ├── tutorCrypto.ts                # Implementasi Hashing Password (scrypt & timingSafeEqual)
+│   └── tutorCrypto.test.js           # Uji unit Jest Tugas 1 (4 skenario)
+│
+├── tugas-2/                          # Direktori Khusus Tugas 2: AEAD & Integritas Data (Tag: crypto/v0.2 & v0.2)
+│   ├── tutorAead.ts                  # Implementasi Enkripsi Terautentikasi (AES-256-GCM)
+│   ├── tutorAead.test.js             # Uji unit Jest Tugas 2 (6 skenario fail-closed)
+│   ├── KEPUTUSAN.md                  # Dokumen Keputusan Teknis (Kebutuhan -> Mekanisme -> Alasan)
+│   └── AI_LOG.md                     # Log Penggunaan AI Tugas 2
+│
+├── index.ts                          # Re-export terpadu seluruh fungsi kriptografi
+├── tutorCrypto.ts                    # Bridge backward-compatibility Tugas 1
+├── tutorAead.ts                      # Bridge backward-compatibility Tugas 2
+├── KEPUTUSAN.md                      # Akses cepat dokumen keputusan teknis Tugas 2
+├── AI_LOG.md                         # Akses cepat catatan AI
+└── kripto_README.md                  # Berkas dokumentasi utama ini
+```
 
 ---
 
-## 4. Skenario Uji Otomatis & Hasil
-Modul ini dilengkapi dengan skenario pengujian otomatis menggunakan framework Jest yang mencakup pengujian positif, batas, dan negatif.
+## Perbandingan Tugas 1 vs Tugas 2
 
-- **Jumlah Skenario Uji:** 4 skenario
-- **Status Minimal Berhasil:** 4/4 Berhasil
+| Atribut Evaluasi | Tugas 1 (Pekan 3) | Tugas 2 (Pekan 6) |
+|:---|:---|:---|
+| **Topik Utama** | Fondasi & Komponen Dasar Kriptografi | Enkripsi Terautentikasi & Integritas Data |
+| **Aset yang Dilindungi** | Kredensial Pengguna (Password Siswa/Tutor) | Catatan Sesi Bimbingan Privat & Rekam Konseling Siswa |
+| **Mekanisme / Algoritma** | Password Hashing (`scrypt` + CSPRNG Salt) | Authenticated Encryption with Associated Data (**AES-256-GCM**) |
+| **Jaminan Keamanan** | *One-way irreversible hashing* & mitigasi *timing attack* via `timingSafeEqual` | Kerahasiaan (*confidentiality*) + Keutuhan Data (*authenticity & integrity*) + *Context binding* (AAD) |
+| **Parameter Kunci** | Salt 16-byte acak per pengguna | Kunci simetris 256-bit CSPRNG, IV 96-bit, Auth Tag 128-bit, AAD Kontekstual |
+| **Penyimpanan Rahasia** | Salt tersimpan bersama hash (`salt:hash`) | Kunci rahasia di luar repo via `.env` (`TUTORCARE_ENCRYPTION_KEY`) |
+| **Respon Kondisi Tidak Sah** | Mengembalikan `false` | **Gagal Tertutup (*Fail-Closed*)**: Melempar eksepsi tanpa bocor plaintext |
+| **Tag Rilis Git** | `crypto/v0.1` | `crypto/v0.2` (dan `v0.2`) |
+| **Letak Berkas** | [`crypto/tugas-1/`](tugas-1/) | [`crypto/tugas-2/`](tugas-2/) |
 
-### **Cara Menjalankan Pengujian Kriptografi:**
-Pastikan Anda berada di direktori root repositori, lalu jalankan perintah berikut di terminal:
+---
+
+## 1. Dokumentasi Tugas 2: Enkripsi Terautentikasi (AEAD)
+
+### A. Lokasi Kode & Pengujian
+- **Kode Sumber:** [`crypto/tugas-2/tutorAead.ts`](tugas-2/tutorAead.ts)
+- **Unit Test:** [`crypto/tugas-2/tutorAead.test.js`](tugas-2/tutorAead.test.js)
+- **Keputusan Teknis:** [`crypto/tugas-2/KEPUTUSAN.md`](tugas-2/KEPUTUSAN.md) (atau di root [`../KEPUTUSAN.md`](../KEPUTUSAN.md))
+- **Log AI:** [`crypto/tugas-2/AI_LOG.md`](tugas-2/AI_LOG.md) (atau di root [`../AI_LOG.md`](../AI_LOG.md))
+
+### B. Contoh Penggunaan API Tugas 2
+
+```typescript
+import {
+  encryptAEAD,
+  decryptAEAD,
+  generateEncryptionKey,
+  serializeEncryptedPayload,
+} from './tugas-2/tutorAead';
+
+// 1. Ambil atau bangkitkan kunci 256-bit CSPRNG
+const key = generateEncryptionKey(); // atau otomatis dari process.env.TUTORCARE_ENCRYPTION_KEY
+
+// 2. Data sensitif bimbingan dan konteks AAD
+const catatanPrivat = "Siswa membutuhkan bimbingan intensif materi Graf dan Tree.";
+const konteksAad = "TutorCare:Konsultasi:Siswa_105224044:ID_99";
+
+// 3. Enkripsi Terautentikasi
+const payload = encryptAEAD(catatanPrivat, konteksAad, key);
+console.log("Ciphertext (Hex):", payload.ciphertext);
+console.log("IV (Hex):", payload.iv);
+console.log("Tag (Hex):", payload.tag);
+
+// Simpan dalam format string aman di database
+const databaseValue = serializeEncryptedPayload(payload); // "iv:tag:ciphertext"
+
+// 4. Dekripsi Terautentikasi (Verifikasi integritas fail-closed)
+const plaintext = decryptAEAD(databaseValue, konteksAad, key);
+console.log("Hasil Dekripsi Sah:", plaintext);
+```
+
+---
+
+## 2. Cara Menjalankan Seluruh Pengujian Otomatis
+
+Jalankan perintah berikut di direktori root `tutorship-nextjs`:
 
 ```bash
 npm test
+```
 
-### **Output Hasil Pengujian di Terminal:**
+### Hasil Eksekusi:
 ```text
-PASS  crypto/tutorCrypto.test.js
-  Pengujian Skenario Kriptografi TutorCare
-    ✓ Skenario 1: Hashing password menghasilkan format string yang valid (115 ms)
-    ✓ Skenario 2: Verifikasi sukses saat password benar (58 ms)
-    ✓ Skenario 3 (Negatif): Verifikasi gagal jika password salah (55 ms)
-    ✓ Skenario 4 (Uji Batas): Menangani input string kosong tanpa error fatal (12 ms)
+PASS crypto/tugas-2/tutorAead.test.js
+PASS crypto/tugas-1/tutorCrypto.test.js
 
-Test Suites: 1 passed, 1 total
-Tests:       4 passed, 4 total
+Test Suites: 2 passed, 2 total
+Tests:       10 passed, 10 total
+Snapshots:   0 total
+```
 
 ---
 
-## 5. Struktur Repositori & Cara Menjalankan Aplikasi Web
+## 3. Langkah Push Commit dan Tag `crypto/v0.2`
 
-```text
-tutorship-nextjs/
-├── app/                  # Kode sumber frontend Next.js App Router & komponen
-├── security/             # Dokumentasi keamanan (Asset, DFD, Threat Model, Risk Register, AI Log)
-├── crypto/               # Modul pustaka kriptografi (tutorCrypto.ts & tutorCrypto.test.js)
-├── package.json          # Konfigurasi dependensi dan skrip proyek
-└── README.md             # Dokumentasi utama proyek
-```
+Untuk mengirimkan hasil pekerjaan Tugas 2 ke GitHub:
 
-Untuk menjalankan aplikasi web secara keseluruhan:
 ```bash
-npm install
-npm run dev
+# Push commit branch main
+git push origin main
+
+# Push tag crypto/v0.2
+git push origin crypto/v0.2
+
+# Push tag v0.2
+git push origin v0.2
 ```
-
----
-
-## 6. Kepatuhan & Versioning
-* **Kepatuhan Data:** Tidak ada kunci privat, token asli, *password*, *secrets*, atau data pribadi nyata yang diunggah ke repositori; seluruhnya menggunakan data sintetis.
-* **Tag Pengumpulan Akademik:** `v0.1`
