@@ -1,0 +1,373 @@
+
+
+=== PAGE 1 ===
+
+Modul 7
+Static dan Dynamic Routing
+7.1 Tujuan Praktikum
+Mahasiswa diharapkan dapat:
+1. Memahami konsep dasar routing dalam jaringan komputer serta peran
+router sebagai perangkat pengarah lalu lintas data antar jaringan.
+2. Memahami perbedaan antara static routing dan dynamic routing ,
+serta menentukan kondisi penggunaan yang tepat untuk masing-masing
+jenis.
+3. Mengonﬁgurasi static routing pada router Cisco secara manual meng-
+gunakan perintah ip route melalui CLI.
+4. Mengonﬁgurasi dynamic routing menggunakan protokol Enhanced In-
+terior Gateway Routing Protocol (EIGRP) pada topologi jaringan de-
+ngan dua dan tiga router.
+5. Memveriﬁkasi keberhasilan konﬁgurasi routing menggunakan perintah
+show ip route , show ip interface brief ,d a nshow ip eigrp neighbor ,
+serta melakukan uji konektivitas dengan ping.
+7.2 Indikator Pencapaian
+Mahasiswa dinyatakan berhasil dalam praktikum ini jika dapat:
+82
+
+=== PAGE 2 ===
+
+7.3. KOMPONEN DAN PERALATAN YANG DIPERLUKAN 83
+1. Menjelaskan konsep routing dan membedakan cara kerja static routing
+dengan dynamic routing beserta kelebihan dan kekurangan masing-
+masing.
+2. Membangun topologi jaringan multi- router di Cisco Packet Tracer,
+mengonﬁgurasi IP address pada setiap antarmuka router dan PC, serta
+mengaktifkan antarmuka menggunakan perintah no shutdown .
+3. Menerapkan konﬁgurasi static routing menggunakan perintah ip route
+dan memveriﬁkasi tabel routing menggunakan perintah show ip route .
+4. Mengonﬁgurasi dynamic routing dengan protokol EIGRP pada seluruh
+router menggunakan nomor Autonomous System (AS) yang konsisten
+dan mendaftarkan semua jaringan yang terhubung.
+5. Memveriﬁkasi konektivitas jaringan antar PC yang berada di ruangan
+berbeda melalui ping test setelah konﬁgurasi routing diterapkan.
+7.3 Komponen dan Peralatan yang Diperlukan
+Untuk mendukung praktikum ini, mahasiswa memerlukan:
+A. Perangkat Lunak
+• Cisco Packet Tracer.
+• Sistem operasi dengan akses ke Command Prompt (Windows) atau
+Terminal (Linux/macOS).
+B. Perangkat Jaringan Virtual (di Cisco Packet Tracer)
+Untuk topologi Static Routing:
+• 2 PC (End Devices ).
+• 2 Router (Cisco 2911).
+• Kabel jaringan Copper Straight-Through untuk koneksi PC ke router.
+• Kabel jaringan Copper Cross-Over untuk koneksi antar router.
+Untuk topologi Dynamic Routing (EIGRP 3 Router):
+• 6 PC (End Devices ).
+
+=== PAGE 3 ===
+
+7.4. DASAR-DASAR ROUTING 84
+• 3 Router (Cisco 2911), dengan Router1 dilengkapi modul tambahan
+NM-1FE-TX.
+• 2 Switch (Cisco 2950T).
+• Kabel jaringan Copper Straight-Through untuk koneksi PC ke switch
+dan switch ke router.
+• Kabel jaringan Copper Cross-Over untuk koneksi antar router.
+7.4 Dasar-Dasar Routing
+Routing merupakan proses pengambilan dan pengiriman paket data dari su-
+atu perangkat dalam sebuah jaringan menuju jaringan lainnya. Perangkat
+yang digunakan untuk menjalankan proses ini adalah router.D a l a m k o n t e k s
+routing,f o k u su t a m ab u k a np a d ap e r a n g k a thost secara individual, melainkan
+pada jaringan ( network )d a nj a l u rt e r b a i ky a n gh a r u sd i t e m p u hu n t u km e n -
+jangkau setiap jaringan tujuan. Oleh karena itu, router memerlukan infor-
+masi berupa alamat IP sumber ( source)d a na l a m a tI Pt u j u a n(destination).
+Agar dapat mengirimkan paket dengan tepat, router membutuhkan seti-
+daknya dua informasi utama, yaitu seluruh rute yang mungkin menuju se-
+tiap jaringan, serta rute terbaik untuk setiap jaringan yang dituju. Infor-
+masi ini disimpan dalam sebuah tabel routing yang digunakan router untuk
+memetakan jaringan antara ( internetwork )d a nm e n g i d e n t i ﬁ k a s iremote net-
+works,y a i t uj a r i n g a ny a n gt i d a kt e r h u b u n gs e c a r al a n g s u n gk ea n t a r m u k a
+router.
+7.5 Static Routing
+Static routing adalah jenis routing yang mengharuskan administrator jaringan
+untuk menambahkan setiap entri rute pada semua router secara manual.
+Pendekatan ini masih layak diterapkan pada jaringan berskala kecil yang
+tidak memerlukan banyak jaringan. Namun, pada jaringan yang lebih besar,
+pengelolaan secara manual menjadi sangat tidak praktis karena setiap pe-
+rubahan topologi mengharuskan pembaruan konﬁgurasi pada seluruh router
+yang terlibat.
+Kelebihan static routing antara lain: konﬁgurasi yang sederhana untuk
+jaringan kecil, jalur routing yang dapat diprediksi, serta konsumsi sumber
+
+=== PAGE 4 ===
+
+7.6. TOPOLOGI STATIC ROUTING SEDERHANA 85
+daya yang lebih rendah karena tabel routing tidak diperbarui secara otoma-
+tis. Adapun kekurangannya meliputi keterbatasan skalabilitas, kebutuhan
+pembaruan manual setiap kali terjadi perubahan jaringan, serta kemampuan
+adaptasi yang lambat terhadap perubahan topologi.
+7.6 Topologi Static Routing Sederhana
+Pada bagian praktikum ini, akan dibangun sebuah topologi static routing
+sederhana yang terdiri atas dua router dan dua PC. Ikuti setiap langkah di
+bawah ini secara berurutan.
+1. Bangun topologi jaringan seperti yang ditunjukkan pada Gambar 7.1.
+Konﬁgurasi IP address pada setiap perangkat sesuai dengan skema pen-
+galamatan yang tertera pada gambar.
+Table 7.1: Konﬁgurasi IP Address pada top ologi Static Routing
+Perangkat Antarmuka IP Address Subnet Mask
+PC0 Fa0 192.168.1.x 255.255.255.0
+PC1 Fa0 192.168.2.x 255.255.255.0
+Router0 Fa0/0 192.168.1.1 255.255.255.0
+Router0 Fa0/1 10.10.10.1 255.255.255.0
+Router1 Fa0/1 10.10.10.2 255.255.255.0
+Router1 Fa0/0 192.168.2.1 255.255.255.0
+2. Konﬁgurasikan IP address pada kedua PC sesuai dengan skema pen-
+galamatan yang ditunjukkan pada Gambar 7.1. Pastikan juga default
+gateway setiap PC diarahkan ke antarmuka router yang terhubung
+langsung ke PC tersebut.
+3. Konﬁgurasikan antarmukarouter yang terhubung ke PC. Berikut adalah
+perintah untuk mengonﬁgurasi Router1 terhadap PC1. Lakukan hal
+yang sama pada Router0 terhadap PC0 dengan menyesuaikan alamat
+IP sesuai Tabel 7.1. Hasil konﬁgurasi ditunjukkan pada Gambar 7.2.
+1 enable
+2 configure terminal
+
+=== PAGE 5 ===
+
+7.6. TOPOLOGI STATIC ROUTING SEDERHANA 86
+Gambar 7.1: Topologi awal Static Routing dengan dua Router dan dua PC
+3 interface FastEthernet0/0
+4 no shutdown
+5 ip address 192.168.2.1 255.255.255.0
+6
+Gambar 7.2: Output CLI konﬁgurasi antarmuka Router terhadap PC beserta
+tampilan workspace
+4. Konﬁgurasikan antarmuka router yang menghubungkan kedua router
+(tautan router-to-router). Jalankan perintah berikut pada Router0,
+
+=== PAGE 6 ===
+
+7.6. TOPOLOGI STATIC ROUTING SEDERHANA 87
+kemudian lakukan hal yang sama pada Router1 dengan menyesuaikan
+alamat IP sesuai Tabel 7.1. Hasil konﬁgurasi beserta output show ip
+route dan show ip interface brief ditunjukkan pada Gambar 7.3.
+1 interface FastEthernet0/1
+2 no shutdown
+3 ip address 10.10.10.1 255.255.255.0
+4 interface FastEthernet0/0
+5 no shutdown
+6 ip address 192.168.1.1 255.255.255.0
+7
+Gambar 7.3: Output CLI konﬁgurasi antarmuka antar-Router dan hasil show
+ip route serta show ip interface brief pada kedua Router
+Langkah selanjutnya adalah menambahkan entri static routing agar se-
+tiap router mengetahui cara menjangkau jaringan yang tidak terhubung
+langsung. Gunakan format perintah berikut:
+1 ip route [ip-tujuan] [subnet -mask -tujuan] [ip-
+router -tujuan]
+2
+
+=== PAGE 7 ===
+
+7.7. DYNAMIC ROUTING 88
+Sebagai contoh, untuk mengonﬁgurasi Router0 agar dapat menjangkau
+jaringan 192.168.2.0/24 melalui Router1:
+1 ip route 192.168.2.0 255.255.255.0 10.10.10.2
+2
+Lakukan hal yang sama pada Router1 untuk jaringan 192.168.1.0/24
+melalui Router0. Setelah itu, veriﬁkasi tabel routing dan status antar-
+muka menggunakan:
+1 show ip route
+2 show ip interface brief
+3
+Hasil konﬁgurasi static routing beserta output kedua perintah veriﬁkasi
+ditunjukkan pada Gambar 7.4.
+Gambar 7.4: Output CLI static routing dan hasil show ip route serta show
+ip interface brief setelah static routing dikonﬁgurasi pada kedua Router
+7.7 Dynamic Routing
+Berbeda dengan static routing yang memerlukan konﬁgurasi manual, dy-
+namic routing memungkinkan router untuk secara otomatis menemukan dan
+
+=== PAGE 8 ===
+
+7.8. INTERIOR GATEW AY PROTOCOLS (IGPS) 89
+memperbarui rute menuju jaringan tujuan melalui pertukaran informasi antar-
+router menggunakan protokol routing.R u t e - r u t e t e r s e b u t s e c a r a o t o m a t i s
+ditambahkan ke dalam tabel routing tanpa campur tangan administrator,
+sehingga konﬁgurasi jaringan menjadi jauh lebih eﬁsien terutama pada skala
+jaringan yang besar.
+Protokol dynamic routing dibagi menjadi dua kelompok utama: Interior
+Gateway Protocols (IGPs) yang digunakan dalam satu autonomous sys-
+tem,d a n Exterior Gateway Protocols (EGPs) yang digunakan untuk
+menghubungkan antar-autonomous system .
+7.8 Interior Gateway Protocols (IGPs)
+IGP memiliki dua kategori utama berdasarkan algoritma yang digunakan,
+yaitu Distance Vector (DV) dan Link State (LS) .
+Protokol yang termasuk dalam kategori Distance Vector antara lain Rout-
+ing Information Protocol (RIP), RIPv2, dan Interior Gateway Routing Pro-
+tocol (IGRP). Sementara itu, kategori Link State mencakup protokol Open
+Shortest Path First (OSPF) dan Intermediate System-to-Intermediate Sys-
+tem (IS-IS).
+Protokol Distance Vector bekerja dengan mencari rute terpendek berdasarkan
+jumlah hop,y a i t uj u m l a hrouter yang dilalui sebuah paket dalam perjalanan-
+nya menuju tujuan. Rute dengan jumlah hop paling sedikit akan dipilih
+sebagai best route.
+7.9 Exterior Gateway Protocols (EGPs)
+EGP dirancang untuk pertukaran informasi routing antar autonomous sys-
+tem yang berbeda. Salah satu protokol EGP yang paling banyak digunakan
+adalah Border Gateway Protocol (BGP) ,y a n gm e n j a d ip r o t o k o ls t a n -
+dar yang digunakan oleh Internet Service Provider (ISP) maupun perusahaan
+berskala besar untuk mengelola pertukaran rute di tingkat internet global.
+7.10 Topologi EIGRP 2 Router
+Enhanced Interior Gateway Routing Protocol (EIGRP) merupakan protokol
+dynamic routing yang dikembangkan oleh Cisco. Karena merupakan pro-
+
+=== PAGE 9 ===
+
+7.10. TOPOLOGI EIGRP 2 ROUTER 90
+tokol proprietary, EIGRP hanya dapat digunakan pada perangkat-perangkat
+Cisco. Pada bagian ini, akan dikonﬁgurasi EIGRP pada topologi dengan dua
+router.
+1. Buka Cisco Packet Tracer dan bangun topologi jaringan seperti yang
+ditunjukkan pada Gambar 7.5. Konﬁgurasikan seluruh perangkat ter-
+masuk PC, switch,d a n router sesuai dengan skema pengalamatan pada
+gambar. Pastikan PC dalam satu ruangan yang sama dapat saling
+berkomunikasi sebelum melanjutkan ke konﬁgurasi EIGRP.
+Gambar 7.5: Topologi EIGRP 2 Router dengan Switch, PC, dan hasil ping
+test antar PC dalam satu ruangan
+2. Masuk ke CLI Router0, kemudian jalankan perintah berikut untuk
+melihat rentang nilai Autonomous System (AS) yang valid:
+
+=== PAGE 10 ===
+
+7.10. TOPOLOGI EIGRP 2 ROUTER 91
+1 configure terminal
+2 router eigrp ?
+3
+3. Konﬁgurasikan EIGRP pada Router0 dengan memasukkan nomor AS
+dan mendaftarkan seluruh jaringan yang terhubung. Nomor AS yang
+dipilih harus sama pada semua router dalam satu jaringan:
+1 router eigrp 10
+2 network 10.10.10.0
+3 network 192.168.1.0
+4
+4. Masuk ke CLI Router1 dan jalankan perintah konﬁgurasi EIGRP berikut.
+Apabila muncul pesan IP-EIGRP: Neighbor [ip-Router0] is up ,h a l
+tersebut menandakan kedua router telah berhasil saling terhubung
+melalui EIGRP:
+1 configure terminal
+2 router eigrp 10
+3 network 10.10.10.0
+4 network 192.168.2.0
+5
+Catatan: Pada perintah network,a p a b i l ap r e ﬁ k sj a r i n g a nb e r n i -
+lai /24, wildcard mask tidak perlu ditambahkan. Namun jika pre-
+ﬁks bukan /24 (misalnya /28), tambahkan wildcard mask yang
+diperoleh dari invers subnet mask (contoh /28: 0.0.0.15).
+5. Veriﬁkasi koneksi EIGRP dengan menjalankan perintah berikut untuk
+melihat daftar router tetangga yang terhubung:
+1 do show ip eigrp neighbor
+2
+6. Veriﬁkasi tab elrouting yang terbentuk secara otomatis melalui EIGRP:
+
+=== PAGE 11 ===
+
+7.11. TOPOLOGI EIGRP 3 ROUTER 92
+1 do show ip route
+2
+7. Lakukan ping test dari PC di Ruangan I ke PC di Ruangan II untuk
+memveriﬁkasi bahwa komunikasi antar ruangan telah berhasil melalui
+jalur EIGRP.
+7.11 Topologi EIGRP 3 Router
+Pada bagian ini, topologi EIGRP akan diperluas dengan menambahkan satu
+router dan satu ruangan baru, sehingga total menjadi tiga router yang saling
+terhubung.
+1. Tambahkan satu router baru (Router2) ke dalam workspace.S e b e l u m
+menghubungkan Router1 ke Router2, Router1 perlu dilengkapi dengan
+modul antarmuka tambahan. Matikan Router1 terlebih dahulu, kemu-
+dian tambahkan modul NM-1FE-TX melalui tab Physical seperti
+yang ditunjukkan pada Gambar 7.6.
+2. Hubungkan Router1 ke Router2 menggunakan antarmuka yang baru
+ditambahkan, kemudian konﬁgurasikan seluruh perangkat di ruangan
+baru (PC4 dan PC5) beserta antarmuka Router2. Topologi lengkap
+setelah penambahan ruangan ketiga ditunjukkan pada Gambar 7.7.
+3. Masuk ke CLI Router1 dan tambahkan jaringan yang terhubung ke
+Router2 ke dalam konﬁgurasi EIGRP. Konﬁgurasikan antarmuka baru
+serta daftarkan jaringannya:
+1 interface FastEthernet0/1
+2 ip address 10.20.20.1 255.255.255.0
+3 no shutdown
+4 exit
+5 router eigrp 10
+6 network 10.20.20.0
+7
+4. Masuk ke CLI Router2 dan konﬁgurasikan EIGRP dengan mendaf-
+tarkan seluruh jaringan yang terhubung:
+
+=== PAGE 12 ===
+
+7.11. TOPOLOGI EIGRP 3 ROUTER 93
+Gambar 7.6: Penambahan modul NM-1FE-TX pada Router1 melalui tab
+Physical
+
+=== PAGE 13 ===
+
+7.12. TUGAS PENDAHULUAN 94
+Gambar 7.7: Topologi lengkap EIGRP 3 Router dengan tiga ruangan dan
+konﬁgurasi IP address
+1 configure terminal
+2 router eigrp 10
+3 network [ip-antarmuka -fa0/0]
+4 network [ip-antarmuka -fa0/1]
+5
+5. Lakukan ping test dari PC di setiap ruangan ke PC di ruangan lain-
+nya untuk memveriﬁkasi bahwa seluruh komunikasi antar-ruangan telah
+berhasil. Hasil pengujian ditunjukkan pada Gambar 7.8.
+7.12 Tugas Pendahuluan
+1. Apa perbedaan fokus utama router dibandingkan dengan host dalam
+jaringan?
+2. Informasi apa saja yang dibutuhkan oleh router agar dapat mengirim-
+kan paket data ke tujuan yang tepat?
+3. Apa yang dimaksud dengan static routing ?
+4. Kapan penggunaan static routing menjadi tidak eﬁsien atau menyulit-
+kan?
+5. Sebutkan dan jelaskan tiga kelebihan dan tiga kekurangan dari static
+routing!
+
+=== PAGE 14 ===
+
+7.12. TUGAS PENDAHULUAN 95
+Gambar 7.8: Hasil ping test antar PC dari ketiga ruangan setelah EIGRP 3
+Router dikonﬁgurasi
+6. Jelaskan perbedaan utama antara static routing dan dynamic routing.
+7. Mengapa dynamic routing lebih disukai dalam jaringan berskala besar?
+8. Apa yang dimaksud dengan Interior Gateway Protocols (IGPs) dan
+Exterior Gateway Protocols (EGPs)? Berikan contoh protokol dari ke-
+duanya.
+9. Apa prinsip kerja protokol Distance Vector dan bagaimana cara pro-
+tokol ini menentukan best route?J e l a s k a n d e n g a n i l u s t r a s i k o n s e phop.
+10. Bandingkan protokol Distance Vector dengan Link State dari segi cara
+kerja dan kelebihan/kekurangannya. Berikan contoh protokol dari masing-
+masing jenis.
+11. Apa fungsi dari Border Gateway Protocol (BGP) dan mengapa protokol
+ini sangat penting dalam infrastruktur internet global?
+12. EIGRP dikategorikan sebagai protokol hybrid oleh beberapa literatur.
+Jelaskan maksud dari istilah hybrid tersebut dan apa keunggulan EIGRP
+dibandingkan RIP.
+
+=== PAGE 15 ===
+
+7.12. TUGAS PENDAHULUAN 96
+13. Dalam konﬁgurasi EIGRP, mengapa penting untuk menggunakan nomor
+Autonomous System (AS) yang sama di semua router?A p a d a m p a k n y a
+jika nomor AS berbeda?
+14. Jelaskan bagaimana EIGRP mengenali router tetangganya ( neighbor
+discovery)d a nb a g a i m a n ac a r am e m v e r i ﬁ k a s ik o n e k s it e r s e b u tm e l a l u i
+CLI.
+15. Jelaskan langkah-langkah dasar yang dilakukan EIGRP dalam menye-
+barkan dan memperbarui tabel routing.B a g a i m a n a p r o t o k o l i n i m e n -
+jaga konsistensi informasi di seluruh jaringan?
+
+=== PAGE 16 ===
+
+Daftar Pustaka
+[1] James F. Kurose, Keith W. Ross (2021), Computer Networking: A Top-
+Down Approach,P e a r s o n ,U S A .
+[2] Behrouz A. Forouzan (2017), Data Communications and Networking ,
+McGraw-Hill Education, USA.
+[3] Andrew S. Tanenbaum, David J. Wetherall (2021), Computer Networks ,
+Pearson, USA.
+[4] W. Richard Stevens (1994), TCP/IP Illustrated, Volume 1: The Proto-
+cols,A d d i s o n - W e s l e y ,U S A .
+[5] Gary A. Donahue (2017), Network Warrior, O’Reilly Media, USA.
+97
