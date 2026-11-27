@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 550" width="1000" height="550">
+  <rect width="1000" height="550" fill="#1e1e1e" rx="8"/>
+  <rect width="1000" height="34" fill="#2d2d2d" rx="8 8 0 0"/>
+  <text x="20" y="21" fill="#ffffff" font-family="sans-serif" font-size="12" font-weight="bold">React Developer Tools — Components Tab (Penelusuran State Galat 4 FormUlasan)</text>
+
+  <!-- Tree Left -->
+  <rect x="0" y="34" width="400" height="516" fill="#181818" stroke="#333" stroke-width="1"/>
+  <rect x="0" y="34" width="400" height="26" fill="#252526"/>
+  <text x="15" y="51" fill="#aaa" font-family="sans-serif" font-size="11">COMPONENT TREE</text>
+
+  <text x="20" y="85" fill="#888" font-family="Consolas, monospace" font-size="12">&lt;AppLayout&gt;</text>
+  <text x="35" y="110" fill="#888" font-family="Consolas, monospace" font-size="12">&lt;DetailItemPage&gt;</text>
+  <text x="50" y="135" fill="#888" font-family="Consolas, monospace" font-size="12">&lt;ItemCard /&gt;</text>
+  <rect x="40" y="148" width="340" height="28" fill="#094771" rx="4"/>
+  <text x="50" y="167" fill="#ffffff" font-family="Consolas, monospace" font-size="12" font-weight="bold">▶ &lt;FormUlasan itemId={1}&gt;</text>
+  <text x="65" y="195" fill="#888" font-family="Consolas, monospace" font-size="12">&lt;textarea /&gt;</text>
+  <text x="65" y="220" fill="#888" font-family="Consolas, monospace" font-size="12">&lt;button /&gt;</text>
+
+  <!-- Details Right -->
+  <rect x="400" y="34" width="600" height="516" fill="#1e1e1e"/>
+  <rect x="400" y="34" width="600" height="26" fill="#252526" stroke="#333" stroke-width="1"/>
+  <text x="420" y="51" fill="#569cd6" font-family="sans-serif" font-size="12" font-weight="bold">&lt;FormUlasan&gt; Selected Properties &amp; Hooks</text>
+
+  <rect x="420" y="80" width="560" height="200" fill="#252526" stroke="#444" stroke-width="1" rx="6"/>
+  <text x="440" y="105" fill="#9cdcfe" font-family="Consolas, monospace" font-size="13">hooks:</text>
+  <text x="450" y="130" fill="#cccccc" font-family="Consolas, monospace" font-size="12">1. ActionState: { pending: false }</text>
+  <text x="450" y="155" fill="#cccccc" font-family="Consolas, monospace" font-size="12">2. State (isi): <tspan fill="#ce9178">"Materi modul 7 sangat lengkap dan jelas"</tspan> <tspan fill="#73c991">(40 karakter)</tspan></text>
+  
+  <rect x="445" y="170" width="510" height="32" fill="#3a1818" stroke="#ff4444" stroke-width="1" rx="4"/>
+  <text x="455" y="192" fill="#ff79c6" font-family="Consolas, monospace" font-size="13" font-weight="bold">3. State (sisa): 280   &lt;-- MACET! Tidak berkurang saat mengetik</text>
+
+  <text x="450" y="230" fill="#e5a700" font-family="Consolas, monospace" font-size="12">4. Effect: () =&gt; { setSisa(280 - isi.length) }, [] (Dependency array kosong)</text>
+
+  <rect x="420" y="300" width="560" height="220" fill="#202224" stroke="#007acc" stroke-width="1.5" rx="6"/>
+  <text x="440" y="330" fill="#4ec9b0" font-family="sans-serif" font-size="12" font-weight="bold">PENELUSURAN TELAAH KODE &amp; ATURAN REACT HOOKS:</text>
+  <text x="440" y="355" fill="#cccccc" font-family="sans-serif" font-size="12">1. Efek memiliki larik dependensi kosong [], sehingga hanya dipanggil SEKALI saat mount.</text>
+  <text x="440" y="380" fill="#cccccc" font-family="sans-serif" font-size="12">2. Ketika pengguna mengetik (state `isi` berubah), useEffect TIDAK pernah dijalankan ulang.</text>
+  <text x="440" y="405" fill="#cccccc" font-family="sans-serif" font-size="12">3. React Guide "You Might Not Need an Effect" melarang menyimpan nilai turunan di state.</text>
+  <text x="440" y="435" fill="#73c991" font-family="sans-serif" font-size="12" font-weight="bold">✓ Solusi: Hapus useState(sisa) dan useEffect! Cukup hitung nilai saat render:</text>
+  <text x="460" y="460" fill="#9cdcfe" font-family="Consolas, monospace" font-size="12">const sisa = 280 - isi.length;</text>
+  <text x="440" y="490" fill="#cccccc" font-family="sans-serif" font-size="12">Hasil: Bebas efek samping, satu render per ketikan, dan linter react-hooks bersih 100%.</text>
+</svg>

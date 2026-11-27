@@ -10,7 +10,11 @@ function buatClient() {
   const adapter = new PrismaPg({
     connectionString: process.env.DATABASE_URL!,
   });
-  return new PrismaClient({ adapter });
+  return new PrismaClient({
+    adapter,
+    // Modul 7: tampilkan setiap query SQL di terminal untuk keperluan penelusuran debugging
+    log: ["query", "warn", "error"],
+  });
 }
 
 export const prisma = globalUntukPrisma.prisma ?? buatClient();

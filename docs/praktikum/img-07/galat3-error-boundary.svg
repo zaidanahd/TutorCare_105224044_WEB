@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 520" width="1000" height="520">
+  <rect width="1000" height="520" fill="#f8fafc" rx="8"/>
+  <rect width="1000" height="50" fill="#ffffff" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="30" y="32" fill="#0284c7" font-family="sans-serif" font-size="16" font-weight="bold">TutorCare &bull; Platform Katalog Pembelajaran</text>
+  <text x="850" y="32" fill="#64748b" font-family="sans-serif" font-size="12">http://localhost:3000/katalog/99</text>
+
+  <!-- Error Boundary Card -->
+  <rect x="220" y="100" width="560" height="340" fill="#ffffff" stroke="#fecaca" stroke-width="1.5" rx="16" filter="drop-shadow(0 10px 15px rgba(0,0,0,0.05))"/>
+  <rect x="250" y="130" width="48" height="48" fill="#fee2e2" rx="12"/>
+  <text x="268" y="162" fill="#dc2626" font-family="sans-serif" font-size="24" font-weight="bold">!</text>
+
+  <text x="250" y="215" fill="#991b1b" font-family="sans-serif" font-size="22" font-weight="bold">Item gagal diproses</text>
+  <text x="250" y="245" fill="#475569" font-family="sans-serif" font-size="14">Terjadi kesalahan tak terduga saat memuat atau memproses item ini.</text>
+  <text x="250" y="268" fill="#64748b" font-family="sans-serif" font-size="13">Galat terjadi karena data telah dihapus di tab lain (Prisma RecordNotFound P2025).</text>
+
+  <rect x="250" y="290" width="500" height="36" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="1" rx="8"/>
+  <text x="265" y="313" fill="#475569" font-family="Consolas, monospace" font-size="12">Kode rujukan (Error Digest): <tspan fill="#dc2626" font-weight="bold">3849102845</tspan></text>
+
+  <rect x="250" y="350" width="130" height="42" fill="#dc2626" rx="8"/>
+  <text x="282" y="376" fill="#ffffff" font-family="sans-serif" font-size="14" font-weight="bold">Coba lagi</text>
+
+  <rect x="395" y="350" width="170" height="42" fill="#ffffff" stroke="#cbd5e1" stroke-width="1" rx="8"/>
+  <text x="415" y="376" fill="#334155" font-family="sans-serif" font-size="14" font-weight="bold">Kembali ke Katalog</text>
+
+  <!-- Note Badge -->
+  <rect x="220" y="460" width="560" height="32" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1" rx="6"/>
+  <text x="235" y="481" fill="#1e40af" font-family="sans-serif" font-size="11" font-weight="bold">✓ Tampilan Client Component Error Boundary (app/katalog/[id]/error.tsx) aktif dan menangani P2025.</text>
+</svg>
